@@ -65,11 +65,11 @@ QStringList FriendManager::getCurrentRowData()
 
 QString FriendManager::getCurrentPhone()
 {
-    QString ID ;
+    QString Phone ;
     int row = ui->tableWidget->currentRow();
     if(row != -1)
     {
-        ID =  ui->tableWidget->item(row , 1)->text();
+        Phone =  ui->tableWidget->item(row , 1)->text();
     }
-    return ID;
+    return Phone;
 }

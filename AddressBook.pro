@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = AddressBook
@@ -14,10 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    friendmanager.cpp
+    friendmanager.cpp \
+    addstudlg.cpp
 
 HEADERS  += mainwindow.h \
-    friendmanager.h
+    friendmanager.h \
+    addstudlg.h
 
 FORMS    += mainwindow.ui \
-    friendmanager.ui
+    friendmanager.ui \
+    addstudlg.ui
