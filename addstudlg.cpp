@@ -1,4 +1,4 @@
-#include "addstudlg.h"
+﻿#include "addstudlg.h"
 #include "ui_addstudlg.h"
 #include <QDateTime>
 #include <QString>
@@ -24,7 +24,7 @@ void AddStuDlg::setEditData(QStringList rowData)
     ui->AddressEdit->setText(rowData.at(3));
     ui->DescText->setText(rowData.at(4));
 
-    ui->PhoneEdit->setEnabled(false);
+    //ui->PhoneEdit->setEnabled(false);
 }
 
 void AddStuDlg::clearData()
@@ -61,11 +61,11 @@ void AddStuDlg::on_buttonBox_accepted()
     stuInfo.insert("desc" ,desc );
 
     emit signalStuInfo(stuInfo);
-    ui->EmailEdit->setEnabled(true);
+    //ui->PhoneEdit->setEnabled(true);
 }
 
 void AddStuDlg::on_buttonBox_rejected()
 {
-    ui->EmailEdit->setEnabled(true);
+    //ui->PhoneEdit->setEnabled(true);
     close();
 }

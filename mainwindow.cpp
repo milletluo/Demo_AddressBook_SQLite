@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QObject>
 #include <QHBoxLayout>
@@ -34,16 +34,16 @@ void MainWindow::initUi()
     setContentsMargins(5 , 10, 5 ,5);
 
     QPushButton *btnRefresh = new QPushButton;
-    btnRefresh->setText(tr("刷新"));
+    btnRefresh->setText(QStringLiteral("刷新"));
 
     QPushButton *btnAdd = new QPushButton;
-    btnAdd->setText(tr("添加"));
+    btnAdd->setText(QStringLiteral("添加"));
 
     QPushButton *btnEdit = new QPushButton;
-    btnEdit->setText(tr("编辑"));
+    btnEdit->setText(QStringLiteral("编辑"));
 
     QPushButton *btnDel = new QPushButton;
-    btnDel->setText(tr("删除"));
+    btnDel->setText(QStringLiteral("删除"));
 
     QWidget *widget = new QWidget;
     widget->setMinimumSize(20 ,55);
@@ -72,8 +72,10 @@ void MainWindow::initUi()
 void MainWindow::initDB()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setHostName("HostName.db");
-    db.setDatabaseName("DatabaseName");
+    //db.setHostName("localhost");//设置主机名
+    db.setDatabaseName("AddressBook.db");
+    //db.setUserName("root");   // 如果是 SQLite 不需要
+    //db.setPassword("root");   // 如果是 SQLite 不需要
     bool ok = db.open();
     if(ok)
     {
@@ -81,7 +83,7 @@ void MainWindow::initDB()
 
         QSqlQuery query;
         query.exec("create table FriendManager (create_date datetime, "
-                   "name varchar(20) ,phone varchar(20)  primary key, "
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT,name varchar(20) ,phone varchar(20), "
                    "email varchar(20) , address varchar(20) , description varchar(50))");
     }
     else
@@ -100,12 +102,12 @@ QList<QStringList> MainWindow::selectDataFromBase()
     {
         QStringList rowData ;
 
-        rowData <<query.value(1).toString();
         rowData <<query.value(2).toString();
         rowData <<query.value(3).toString();
         rowData <<query.value(4).toString();
         rowData <<query.value(5).toString();
         rowData <<query.value(6).toString();
+        rowData <<query.value(7).toString();
 
         stuInfo.append(rowData);
     }
@@ -137,7 +139,7 @@ void MainWindow::onBtnAdd()
     if(m_pAddStuDlg)
     {
         m_pAddStuDlg->activateWindow();
-        m_pAddStuDlg->setWindowTitle(QStringLiteral("add contacts"));
+        m_pAddStuDlg->setWindowTitle(QStringLiteral("添加联系人"));
         m_pAddStuDlg->exec();
     }
 }
@@ -151,7 +153,7 @@ void MainWindow::onBtnEdit()
     rowData = m_pTableWidget->getCurrentRowData();
     if(rowData.isEmpty())
     {
-        QMessageBox::information(this, tr("提示") , tr("请选中需要编辑的数据!"));
+        QMessageBox::information(this, QStringLiteral("提示") , QStringLiteral("请选中需要编辑的数据!"));
         return ;
     }
     else
@@ -160,7 +162,7 @@ void MainWindow::onBtnEdit()
     }
 
     m_pAddStuDlg->activateWindow();
-    m_pAddStuDlg->setWindowTitle(tr("edit contacts"));
+    m_pAddStuDlg->setWindowTitle(QStringLiteral("修改联系人"));
     m_pAddStuDlg->exec();
 }
 
@@ -170,11 +172,11 @@ void MainWindow::onBtnDel()
     QString Phone = m_pTableWidget->getCurrentPhone();
     if(Phone.isEmpty())
     {
-        QMessageBox::information(this , tr("提示") , tr("请选中一条记录！"));
+        QMessageBox::information(this , QStringLiteral("提示") , QStringLiteral("请选中一条记录！"));
         return ;
     }
 
-    QMessageBox::StandardButton button = QMessageBox::question(this , tr("提示") ,tr("确定删除这一条记录？"));
+    QMessageBox::StandardButton button = QMessageBox::question(this , QStringLiteral("提示") ,QStringLiteral("确定删除这一条记录？"));
     if(button == QMessageBox::Yes)
     {
         //删除操作
@@ -206,11 +208,11 @@ void MainWindow::ExecAddSql(QVariantMap stuInfo)
             rowData << name <<phone <<email << address << description ;
             m_pTableWidget->appendRowData(rowData);
 
-            QMessageBox::information(this ,tr("提示") , tr("添加成功!"));
+            QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("添加成功!"));
         }
         else
         {
-            QMessageBox::information(this ,tr("提示") , tr("添加失败!"));
+            QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("添加失败!"));
         }
     }
 }
@@ -238,11 +240,11 @@ void MainWindow::ExecEditSql(QVariantMap stuInfo)
         if(ok)
         {
             onBtnRefresh(); //重新加载数据
-            QMessageBox::information(this ,tr("提示") , tr("修改成功!"));
+            QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("修改成功!"));
         }
         else
         {
-            QMessageBox::information(this ,tr("提示") , tr("修改失败!"));
+            QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("修改失败!"));
         }
     }
 }
@@ -258,10 +260,10 @@ void MainWindow::ExecDelSql(QString phone)
     if(ok)
     {
         onBtnRefresh(); //重新加载数据
-        QMessageBox::information(this ,tr("提示") , tr("删除成功!"));
+        QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("删除成功!"));
     }
     else
     {
-        QMessageBox::information(this ,tr("提示") , tr("删除失败!"));
+        QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("删除失败!"));
     }
 }
