@@ -213,7 +213,7 @@ void MainWindow::ExecAddSql(QVariantMap stuInfo)
             QStringList rowData;
             rowData << name <<phone <<email << address << description ;
             m_pTableWidget->appendRowData(rowData);
-
+            onBtnRefresh(); //重新加载数据
             QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("添加成功!"));
         }
         else

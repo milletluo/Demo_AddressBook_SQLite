@@ -22,7 +22,7 @@ public:
     QString getCurrentPhone();
 
     void setTableModel(QSqlTableModel* model); //建立了数据库和QTableview的映射
-public:
+private:
     Ui::FriendManager *ui;
 };
 
