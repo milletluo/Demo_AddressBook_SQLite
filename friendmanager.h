@@ -1,7 +1,8 @@
-#ifndef FRIENDMANAGER_H
+﻿#ifndef FRIENDMANAGER_H
 #define FRIENDMANAGER_H
 
 #include <QWidget>
+#include <QSqlTableModel>
 
 namespace Ui {
 class FriendManager;
@@ -19,7 +20,9 @@ public:
     void clearTableData(); //清除表格数据
     QStringList getCurrentRowData();
     QString getCurrentPhone();
-private:
+
+    void setTableModel(QSqlTableModel* model); //建立了数据库和QTableview的映射
+public:
     Ui::FriendManager *ui;
 };
 

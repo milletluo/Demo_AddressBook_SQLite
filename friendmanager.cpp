@@ -1,4 +1,4 @@
-#include "friendmanager.h"
+﻿#include "friendmanager.h"
 #include "ui_friendmanager.h"
 #include <QTableWidgetItem>
 #include <QHeaderView>
@@ -10,12 +10,12 @@ FriendManager::FriendManager(QWidget *parent) :
     ui->setupUi(this);
     ui->tableWidget->setColumnCount(5);
     ui->tableWidget->setRowCount(0);
-    ui->tableWidget->setHorizontalHeaderLabels(QStringList() <<"姓名" << "电话"<< "邮箱"
-                                               <<"家庭住址" <<"描述");
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() <<QStringLiteral("姓名") << QStringLiteral("电话")<< QStringLiteral("邮箱")
+                                               <<QStringLiteral("家庭住址") <<QStringLiteral("描述"));
 
     ui->tableWidget->setAlternatingRowColors(true);
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
 }
 
@@ -72,4 +72,11 @@ QString FriendManager::getCurrentPhone()
         Phone =  ui->tableWidget->item(row , 1)->text();
     }
     return Phone;
+}
+
+void FriendManager::setTableModel(QSqlTableModel* model)
+{
+    //建立数据库和QTableview的映射
+    ui->tableView->setModel(model);
+    ui->tableView->show();
 }

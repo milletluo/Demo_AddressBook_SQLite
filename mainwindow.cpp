@@ -129,6 +129,12 @@ void MainWindow::onBtnRefresh()
             m_pTableWidget->appendRowData(itr.next());
         }
     }
+
+    QSqlTableModel *model = new QSqlTableModel;
+    model->setTable("FriendManager");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    m_pTableWidget->setTableModel(model);
 }
 
 void MainWindow::onBtnAdd()
