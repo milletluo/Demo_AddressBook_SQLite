@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QSqlRecord>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,8 +31,8 @@ void MainWindow::initUi()
 {
     m_pTableWidget = new FriendManager;
 
-    setCentralWidget(m_pTableWidget);
-    setContentsMargins(5 , 10, 5 ,5);
+    //setCentralWidget(m_pTableWidget);
+    //setContentsMargins(5 , 10, 5 ,5);
 
     QPushButton *btnRefresh = new QPushButton;
     btnRefresh->setText(QStringLiteral("刷新"));
@@ -45,23 +46,35 @@ void MainWindow::initUi()
     QPushButton *btnDel = new QPushButton;
     btnDel->setText(QStringLiteral("删除"));
 
-    QWidget *widget = new QWidget;
-    widget->setMinimumSize(20 ,55);
-    widget->setContentsMargins(0,0,0,10);
+    QPushButton *btnSelect = new QPushButton;
+    btnSelect->setText(QStringLiteral("查询"));
+    ledSelect = new QLineEdit;
 
-    QHBoxLayout *hLayout = new QHBoxLayout(widget);
+    widget = new QWidget;
+    //widget->setMinimumSize(20 ,55);
+    //widget->setContentsMargins(0,0,0,10);
+
+    QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(btnRefresh);
     hLayout->addWidget(btnAdd);
     hLayout->addWidget(btnEdit);
     hLayout->addWidget(btnDel);
+    hLayout->addWidget(btnSelect);
+    hLayout->addWidget(ledSelect);
 
-    widget->setLayout(hLayout);
-    ui->menuBar->setCornerWidget(widget ,Qt::TopRightCorner);
+    //widget->setLayout(hLayout);
+    //ui->menuBar->setCornerWidget(widget ,Qt::TopRightCorner);
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addLayout(hLayout);
+    vLayout->addWidget(m_pTableWidget);
+    widget->setLayout(vLayout);
+    setCentralWidget(widget);
 
     connect(btnRefresh , SIGNAL(clicked(bool)) , this ,SLOT(onBtnRefresh()));
     connect(btnAdd , SIGNAL(clicked(bool)) , this ,SLOT(onBtnAdd()));
     connect(btnEdit , SIGNAL(clicked(bool)), this ,SLOT(onBtnEdit()));
     connect(btnDel , SIGNAL(clicked(bool)) ,this , SLOT(onBtnDel()));
+    connect(btnSelect , SIGNAL(clicked(bool)) ,this , SLOT(onBtnSelect()));
 
     m_pAddStuDlg = new AddStuDlg;
     connect(m_pAddStuDlg , SIGNAL(signalStuInfo(QVariantMap)) , this ,SLOT(ExecAddSql(QVariantMap)));
@@ -187,6 +200,42 @@ void MainWindow::onBtnDel()
     {
         //删除操作
         ExecDelSql(Phone);
+    }
+}
+
+void MainWindow::onBtnSelect()
+{
+    QString element = ledSelect->text();
+    qDebug()<<"onBtnSelect"<<element;
+    if(element != "")
+    {
+        QString sql;
+        sql = QString("SELECT * from FriendManager where address = '%1'").arg(element);
+        QSqlQuery query;
+        bool ok = query.exec(sql);
+        QString value="";
+        int count =0;
+        while(query.next())
+        {
+            QSqlRecord rec = query.record();
+            count = rec.count();
+            for(int i = 2; i < count; i++)
+                value += query.value(i).toString()+"  ";
+
+            value += "\n";
+        }
+        if(ok && count==0)
+        {
+            QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("未找到!"));
+        }
+        else if(ok && count != 0)
+        {
+            QMessageBox::information(this ,QStringLiteral("查询地址") , value);
+        }
+        else
+        {
+            QMessageBox::information(this ,QStringLiteral("提示") , QStringLiteral("查询失败!"));
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLineEdit>
 #include "friendmanager.h"
 #include "addstudlg.h"
 
@@ -28,6 +29,7 @@ private slots:
     void onBtnEdit();
     void onBtnDel();
     void onBtnRefresh();
+    void onBtnSelect();
 
     void ExecAddSql(QVariantMap stuInfo);
     void ExecEditSql(QVariantMap stuInfo);
@@ -39,6 +41,8 @@ private:
     OperateType m_operateType;
     FriendManager *m_pTableWidget;
     AddStuDlg* m_pAddStuDlg;
+    QLineEdit *ledSelect;
+    QWidget *widget;
 
     void initUi();
     void initDB();
